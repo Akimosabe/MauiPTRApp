@@ -1,15 +1,19 @@
-﻿using System.Collections.ObjectModel;
+﻿
+namespace MauiPTRApp.ViewModels;
+
+using MauiPTRApp.Views;
+using System.Collections.ObjectModel;
+using System.Text.Json;
+using System.IO;
 using System.Windows.Input;
 using MauiPTRApp.Models;
 using MauiPTRApp.Messages;
 using CommunityToolkit.Mvvm.Messaging;
-using MauiPTRApp.Views;
 using Microsoft.Maui.Controls;
-
-namespace MauiPTRApp.ViewModels;
 
 public class MainViewModel
 {
+    private const string FileName = "books.json";
     public ObservableCollection<Book> Books { get; set; } = new();
 
     public ICommand AddCommand { get; }
@@ -22,7 +26,7 @@ public class MainViewModel
         EditCommand = new Command<Book>(EditBook);
         DeleteCommand = new Command<Book>(DeleteBook);
 
-        // Подписка на сообщения для добавления или обновления книг
+        // Подписка на сообщения
         WeakReferenceMessenger.Default.Register<BookMessage>(this, (recipient, message) =>
         {
             if (message.Value != null)
@@ -35,10 +39,6 @@ public class MainViewModel
                     {
                         existingBook.Title = message.Value.Title;
                         existingBook.Author = message.Value.Author;
-
-                        // Уведомляем об изменении
-                        var index = Books.IndexOf(existingBook);
-                        Books[index] = existingBook;
                     }
                 }
                 else
@@ -46,16 +46,22 @@ public class MainViewModel
                     // Добавляем новую книгу
                     Books.Add(message.Value);
                 }
+
+                SaveBooks(); // Сохраняем изменения
             }
         });
+
+        // Загружаем книги при старте
+        LoadBooks();
     }
 
     private async void AddBook()
     {
+        var book = new Book { Title = string.Empty, Author = string.Empty };
         await Shell.Current.GoToAsync(nameof(AddEditBookPage), true, new Dictionary<string, object>
         {
             { "IsEditing", false },
-            { "Book", new Book { Title = string.Empty, Author = string.Empty } }
+            { "Book", book }
         });
     }
 
@@ -76,6 +82,47 @@ public class MainViewModel
         if (book != null)
         {
             Books.Remove(book);
+            SaveBooks(); // Сохраняем изменения
+        }
+    }
+
+    private void SaveBooks()
+    {
+        try
+        {
+            var json = JsonSerializer.Serialize(Books);
+            var filePath = Path.Combine(FileSystem.AppDataDirectory, FileName);
+            File.WriteAllText(filePath, json);
+            //Application.Current.MainPage.DisplayAlert("Успех", "Книги сохранены", "OK");
+        }
+        catch (Exception ex)
+        {
+            Application.Current.MainPage.DisplayAlert("Ошибка", $"Не удалось сохранить книги: {ex.Message}", "OK");
+        }
+    }
+
+    private void LoadBooks()
+    {
+        try
+        {
+            var filePath = Path.Combine(FileSystem.AppDataDirectory, FileName);
+            if (File.Exists(filePath))
+            {
+                var json = File.ReadAllText(filePath);
+                var books = JsonSerializer.Deserialize<ObservableCollection<Book>>(json);
+                if (books != null)
+                {
+                    Books = books;
+                }
+            }
+            else
+            {
+                Application.Current.MainPage.DisplayAlert("Информация", "Файл с книгами не найден. Будет создан при сохранении.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            Application.Current.MainPage.DisplayAlert("Ошибка", $"Не удалось загрузить книги: {ex.Message}", "OK");
         }
     }
 }

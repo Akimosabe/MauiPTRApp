@@ -1,10 +1,11 @@
-﻿using System.Windows.Input;
+﻿
+namespace MauiPTRApp.ViewModels;
+
+using System.Windows.Input;
 using MauiPTRApp.Models;
 using MauiPTRApp.Messages;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Maui.Controls;
-
-namespace MauiPTRApp.ViewModels;
 
 [QueryProperty(nameof(IsEditing), "IsEditing")]
 [QueryProperty(nameof(Book), "Book")]
@@ -64,9 +65,8 @@ public class AddEditBookViewModel : BindableObject
             Book.Title = Title;
             Book.Author = Author;
 
-            // Отправляем сообщение о сохранении книги
+            // Отправляем сообщение
             WeakReferenceMessenger.Default.Send(new BookMessage(Book, IsEditing));
-
             await Shell.Current.GoToAsync("..");
         }
         else
