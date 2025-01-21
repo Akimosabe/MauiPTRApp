@@ -1,44 +1,90 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MauiPTRApp.ViewModels"
-             x:Class="MauiPTRApp.MainPage">
+             x:Class="MauiPTRApp.MainPage"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
 
     <ContentPage.BindingContext>
         <vm:MainViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <StackLayout Padding="10">
-            <!-- Заголовок -->
-            <Label Text="Список книг" FontSize="24" HorizontalOptions="Center" Margin="0,0,0,20" />
+        <Grid>
+            <!-- Основной контент страницы -->
+            <ScrollView>
+                <StackLayout Padding="20,10">
+                    <!-- Заголовок страницы -->
+                    <Label Text="План чтения"
+                           FontSize="30"
+                           FontAttributes="Bold"
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,20" />
 
-            <!-- Список книг -->
-            <CollectionView ItemsSource="{Binding Books}" SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Padding="5" ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto">
-                            <!-- Название книги -->
-                            <Label Text="{Binding Title}" FontSize="18" VerticalOptions="Center" />
+                    <!-- Список книг -->
+                    <CollectionView ItemsSource="{Binding Books}" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="10" Margin="5"
+                                       HasShadow="True" CornerRadius="10"
+                                       BackgroundColor="{DynamicResource CardBackgroundColor}">
+                                    <Grid ColumnDefinitions="*,Auto,Auto" VerticalOptions="Center">
+                                        <!-- Название книги -->
+                                        <StackLayout Grid.Column="0">
+                                            <Label Text="{Binding Title}" 
+                                                   FontSize="20" 
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryTextColor}" />
 
-                            <!-- Автор -->
-                            <Label Text="{Binding Author}" FontSize="14" TextColor="Gray" Grid.Row="1" VerticalOptions="Center" />
+                                            <!-- Автор книги -->
+                                            <Label Text="{Binding Author}" 
+                                                   FontSize="16" 
+                                                   TextColor="{DynamicResource SecondaryTextColor}" />
+                                        </StackLayout>
 
-                            <!-- Кнопка редактирования -->
-                            <Button Text="Редактировать" FontSize="16" 
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=EditCommand}"
-                                    CommandParameter="{Binding}" HorizontalOptions="End" />
+                                        <!-- Кнопка редактирования -->
+                                        <Button Text="✏️" 
+                                                FontSize="16"
+                                                BackgroundColor="{DynamicResource ButtonBackgroundColor}"
+                                                TextColor="{DynamicResource ButtonTextColor}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=EditCommand}"
+                                                CommandParameter="{Binding}"
+                                                Grid.Column="1" />
 
-                            <!-- Кнопка удаления -->
-                            <Button Text="Удалить" FontSize="16" 
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=DeleteCommand}"
-                                    CommandParameter="{Binding}" HorizontalOptions="End" Grid.Row="1" />
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                        <!-- Кнопка удаления -->
+                                        <Button Text="🗑️" 
+                                                FontSize="16"
+                                                BackgroundColor="{DynamicResource ButtonBackgroundColor}"
+                                                TextColor="{DynamicResource ButtonTextColor}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=DeleteCommand}"
+                                                CommandParameter="{Binding}"
+                                                Grid.Column="2" />
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-            <!-- Кнопка добавления -->
-            <Button Text="Добавить книгу" FontSize="18" Command="{Binding AddCommand}" HorizontalOptions="Center" Margin="0,20,0,0" />
-        </StackLayout>
+                    <!-- Кнопка добавления книги -->
+                    <Button x:Name="AddButton"
+                            Text="Добавить книгу"
+                            FontSize="18"
+                            BackgroundColor="{DynamicResource ButtonBackgroundColor}"
+                            TextColor="{DynamicResource ButtonTextColor}"
+                            Command="{Binding AddCommand}"
+                            HorizontalOptions="Center"
+                            Margin="0,20,0,0" />
+                </StackLayout>
+            </ScrollView>
+
+            <!-- Иконка кота -->
+            <Image Source="cat.png"
+                   Aspect="AspectFit"
+                   HeightRequest="50"
+                   WidthRequest="50"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Start"
+                   Margin="30,5,0,0" />
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -47,7 +47,7 @@ public class MainViewModel
                     Books.Add(message.Value);
                 }
 
-                SaveBooks(); // Сохраняем изменения
+                SaveBooks(); // Сохраняем изменения после добавления/обновления
             }
         });
 
@@ -93,7 +93,6 @@ public class MainViewModel
             var json = JsonSerializer.Serialize(Books);
             var filePath = Path.Combine(FileSystem.AppDataDirectory, FileName);
             File.WriteAllText(filePath, json);
-            //Application.Current.MainPage.DisplayAlert("Успех", "Книги сохранены", "OK");
         }
         catch (Exception ex)
         {
@@ -114,10 +113,6 @@ public class MainViewModel
                 {
                     Books = books;
                 }
-            }
-            else
-            {
-                Application.Current.MainPage.DisplayAlert("Информация", "Файл с книгами не найден. Будет создан при сохранении.", "OK");
             }
         }
         catch (Exception ex)
