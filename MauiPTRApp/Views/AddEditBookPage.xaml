@@ -14,6 +14,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <!-- Иконка кота и надпись PTR -->
@@ -50,33 +51,29 @@
                            TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
                            BackgroundColor="Transparent" />
                 </Frame>
+            </StackLayout>
 
-                <!-- Кнопки управления -->
-                <Grid ColumnDefinitions="*,*" HorizontalOptions="Center" Margin="0,20">
-                    <!-- Кнопка сохранить -->
-                    <Button BackgroundColor="{AppThemeBinding Light=#007BFF, Dark=#0056B3}"
-                            HeightRequest="60"
-                            WidthRequest="60"
-                            CornerRadius="30"
-                            Command="{Binding SaveCommand}"
-                            Grid.Column="0">
-                        <Button.ImageSource>
-                            <FileImageSource File="yes.png" />
-                        </Button.ImageSource>
-                    </Button>
+            <!-- Кнопки управления -->
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="End" Grid.Row="2" Spacing="20" Margin="0,10,0,10">
+                <!-- Кнопка сохранить -->
+                <Button BackgroundColor="{AppThemeBinding Light=#007BFF, Dark=#0056B3}"
+                        HeightRequest="40"
+                        WidthRequest="150"
+                        Command="{Binding SaveCommand}">
+                    <Button.ImageSource>
+                        <FileImageSource File="yes.png" />
+                    </Button.ImageSource>
+                </Button>
 
-                    <!-- Кнопка отмены -->
-                    <Button BackgroundColor="{AppThemeBinding Light=#007BFF, Dark=#0056B3}"
-                            HeightRequest="60"
-                            WidthRequest="60"
-                            CornerRadius="30"
-                            Command="{Binding CancelCommand}"
-                            Grid.Column="1">
-                        <Button.ImageSource>
-                            <FileImageSource File="no.png" />
-                        </Button.ImageSource>
-                    </Button>
-                </Grid>
+                <!-- Кнопка отмены -->
+                <Button BackgroundColor="{AppThemeBinding Light=#b21f1f, Dark=#b21f1f}"
+                        HeightRequest="40"
+                        WidthRequest="150"
+                        Command="{Binding CancelCommand}">
+                    <Button.ImageSource>
+                        <FileImageSource File="no.png" />
+                    </Button.ImageSource>
+                </Button>
             </StackLayout>
         </Grid>
     </ContentPage.Content>

@@ -85,7 +85,7 @@
             </ScrollView>
 
             <!-- Кнопка добавления книги -->
-            <Button Text="Добавить книгу"
+            <Button Text="Добавить"
                     FontSize="14"
                     BackgroundColor="{AppThemeBinding Light=#007BFF, Dark=#0056B3}"
                     TextColor="{AppThemeBinding Light=#121212, Dark=#121212}"
