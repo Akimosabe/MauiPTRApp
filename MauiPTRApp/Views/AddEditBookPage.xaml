@@ -2,51 +2,80 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MauiPTRApp.ViewModels"
              x:Class="MauiPTRApp.Views.AddEditBookPage"
-             BackgroundColor="{DynamicResource PageBackgroundColor}">
+             BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#121212}"
+             NavigationPage.HasNavigationBar="False">
 
     <ContentPage.BindingContext>
         <vm:AddEditBookViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <Grid Padding="20">
-            <!-- Поля для заполнения -->
-            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="300" Spacing="20">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Иконка кота и надпись PTR -->
+            <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Start" Margin="10,10,0,10" Grid.Row="0">
+                <Image Source="cat.png"
+                       Aspect="AspectFit"
+                       HeightRequest="40"
+                       WidthRequest="40" />
+                <Label Text="PTR"
+                       FontSize="12"
+                       FontAttributes="Bold"
+                       TextColor="#b21f1f"
+                       HorizontalOptions="Center" />
+            </StackLayout>
+
+            <!-- Основной контент -->
+            <StackLayout Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="300" Spacing="20">
                 <!-- Поле для названия книги -->
-                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" CornerRadius="10" Padding="5">
+                <Frame Padding="5" CornerRadius="6"
+                       BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#121212}">
                     <Entry Placeholder="Название книги"
                            Text="{Binding Title}"
-                           FontSize="18"
-                           TextColor="{DynamicResource PrimaryTextColor}" />
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+                           BackgroundColor="Transparent" />
                 </Frame>
 
                 <!-- Поле для автора -->
-                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" CornerRadius="10" Padding="5">
+                <Frame Padding="5" CornerRadius="6"
+                       BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#121212}">
                     <Entry Placeholder="Автор"
                            Text="{Binding Author}"
-                           FontSize="18"
-                           TextColor="{DynamicResource PrimaryTextColor}" />
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+                           BackgroundColor="Transparent" />
                 </Frame>
 
                 <!-- Кнопки управления -->
-                <Grid ColumnDefinitions="*,*" Margin="0,20">
+                <Grid ColumnDefinitions="*,*" HorizontalOptions="Center" Margin="0,20">
                     <!-- Кнопка сохранить -->
-                    <Button Text="✔️"
+                    <Button BackgroundColor="{AppThemeBinding Light=#007BFF, Dark=#0056B3}"
+                            HeightRequest="60"
+                            WidthRequest="60"
+                            CornerRadius="30"
                             Command="{Binding SaveCommand}"
-                            FontSize="24"
-                            BackgroundColor="{DynamicResource ButtonBackgroundColor}"
-                            TextColor="{DynamicResource ButtonTextColor}"
-                            CornerRadius="20"
-                            Grid.Column="0" />
+                            Grid.Column="0">
+                        <Button.ImageSource>
+                            <FileImageSource File="yes.png" />
+                        </Button.ImageSource>
+                    </Button>
 
                     <!-- Кнопка отмены -->
-                    <Button Text="❌"
+                    <Button BackgroundColor="{AppThemeBinding Light=#007BFF, Dark=#0056B3}"
+                            HeightRequest="60"
+                            WidthRequest="60"
+                            CornerRadius="30"
                             Command="{Binding CancelCommand}"
-                            FontSize="24"
-                            BackgroundColor="{DynamicResource ButtonBackgroundColor}"
-                            TextColor="{DynamicResource ButtonTextColor}"
-                            CornerRadius="20"
-                            Grid.Column="1" />
+                            Grid.Column="1">
+                        <Button.ImageSource>
+                            <FileImageSource File="no.png" />
+                        </Button.ImageSource>
+                    </Button>
                 </Grid>
             </StackLayout>
         </Grid>
