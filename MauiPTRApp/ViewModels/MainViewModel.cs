@@ -1,5 +1,4 @@
-﻿
-namespace MauiPTRApp.ViewModels;
+﻿namespace MauiPTRApp.ViewModels;
 
 using MauiPTRApp.Views;
 using System.Collections.ObjectModel;
@@ -13,51 +12,57 @@ using Microsoft.Maui.Controls;
 
 public class MainViewModel
 {
-    private const string FileName = "books.json";
-    public ObservableCollection<Book> Books { get; set; } = new();
+    private const string FileName = "books.json"; // здесь будем хранить информацию
+    public ObservableCollection<Book> Books { get; set; } = new(); // коллекция книг для отображения на странице
 
-    public ICommand AddCommand { get; }
-    public ICommand EditCommand { get; }
-    public ICommand DeleteCommand { get; }
+    // Команды для управления книгами
+    public ICommand AddCommand { get; } // Добавление книги
+    public ICommand EditCommand { get; } // Редактирование книги
+    public ICommand DeleteCommand { get; } // Удаление книги
+    public ICommand ShowDescriptionCommand { get; } // Показ/скрытие описания книги
 
     public MainViewModel()
     {
+        // Инициализация команд
         AddCommand = new Command(AddBook);
         EditCommand = new Command<Book>(EditBook);
         DeleteCommand = new Command<Book>(DeleteBook);
+        ShowDescriptionCommand = new Command<Book>(ToggleDescription);
 
-        // Подписка на сообщения
+        // Подписка на сообщения для обновления или добавления книг
         WeakReferenceMessenger.Default.Register<BookMessage>(this, (recipient, message) =>
         {
             if (message.Value != null)
             {
                 if (message.IsUpdate)
                 {
-                    // Обновляем существующую книгу
+                    // Обновление книги
                     var existingBook = Books.FirstOrDefault(b => b == message.Value);
                     if (existingBook != null)
                     {
                         existingBook.Title = message.Value.Title;
                         existingBook.Author = message.Value.Author;
+                        existingBook.Description = message.Value.Description;
                     }
                 }
                 else
                 {
-                    // Добавляем новую книгу
+                    // Добавление в коллекцию
                     Books.Add(message.Value);
                 }
 
-                SaveBooks(); // Сохраняем изменения после добавления/обновления
+                SaveBooks(); // Сохранение изменений
             }
         });
 
-        // Загружаем книги при старте
+        // Загрузка списка книг при запуске
         LoadBooks();
     }
 
     private async void AddBook()
     {
-        var book = new Book { Title = string.Empty, Author = string.Empty };
+        // Создание новой книги и открытие страницы для её редактирования
+        var book = new Book { Title = string.Empty, Author = string.Empty, Description = string.Empty };
         await Shell.Current.GoToAsync(nameof(AddEditBookPage), true, new Dictionary<string, object>
         {
             { "IsEditing", false },
@@ -67,6 +72,7 @@ public class MainViewModel
 
     private async void EditBook(Book book)
     {
+        // Открытие страницы редактирования и передача данных выбранной книги
         if (book != null)
         {
             await Shell.Current.GoToAsync(nameof(AddEditBookPage), true, new Dictionary<string, object>
@@ -79,10 +85,20 @@ public class MainViewModel
 
     private void DeleteBook(Book book)
     {
+        // Удаление из коллекции
         if (book != null)
         {
             Books.Remove(book);
-            SaveBooks(); // Сохраняем изменения
+            SaveBooks(); //Сохранение изменений
+        }
+    }
+
+    private void ToggleDescription(Book book)
+    {
+        // Переключение видимости описания книги
+        if (book != null)
+        {
+            book.IsDescriptionVisible = !book.IsDescriptionVisible;
         }
     }
 
@@ -90,12 +106,14 @@ public class MainViewModel
     {
         try
         {
-            var json = JsonSerializer.Serialize(Books);
+            // Сохраняем колекцию в JSON
+            var json = JsonSerializer.Serialize(Books, new JsonSerializerOptions { WriteIndented = true });
             var filePath = Path.Combine(FileSystem.AppDataDirectory, FileName);
             File.WriteAllText(filePath, json);
         }
         catch (Exception ex)
         {
+            // Сообщение об ошибке, если сохранение не удалось
             Application.Current.MainPage.DisplayAlert("Ошибка", $"Не удалось сохранить книги: {ex.Message}", "OK");
         }
     }
@@ -104,6 +122,7 @@ public class MainViewModel
     {
         try
         {
+            // Выгрузка книг из файла JSON, если он существует
             var filePath = Path.Combine(FileSystem.AppDataDirectory, FileName);
             if (File.Exists(filePath))
             {
@@ -117,6 +136,7 @@ public class MainViewModel
         }
         catch (Exception ex)
         {
+            // Сообщение об ошибке, если загрузка не удалась
             Application.Current.MainPage.DisplayAlert("Ошибка", $"Не удалось загрузить книги: {ex.Message}", "OK");
         }
     }

@@ -2,7 +2,9 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:MauiPTRApp"
        xmlns:views="clr-namespace:MauiPTRApp.Views"
-       x:Class="MauiPTRApp.AppShell">
+       x:Class="MauiPTRApp.AppShell"
+       FlyoutBehavior="Disabled"
+       Shell.NavBarIsVisible="False">
 
     <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
     
@@ -10,3 +12,4 @@
                   ContentTemplate="{DataTemplate views:AddEditBookPage}"
                   Shell.NavBarIsVisible="False" />
 </Shell>
+    

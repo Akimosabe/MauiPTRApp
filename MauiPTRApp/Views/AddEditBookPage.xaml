@@ -2,8 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MauiPTRApp.ViewModels"
              x:Class="MauiPTRApp.Views.AddEditBookPage"
-             BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#121212}"
-             NavigationPage.HasNavigationBar="False">
+             BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#121212}">
 
     <ContentPage.BindingContext>
         <vm:AddEditBookViewModel />
@@ -50,6 +49,19 @@
                            FontSize="14"
                            TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
                            BackgroundColor="Transparent" />
+                </Frame>
+                
+                   <!-- Поле для описания -->
+                <Frame Padding="5" CornerRadius="6"
+                       BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#121212}">
+                    <Editor Placeholder="Описание книги"
+                            Text="{Binding Description}"
+                            FontSize="14"
+                            TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+                            BackgroundColor="Transparent"
+                            HeightRequest="200"
+                            AutoSize="TextChanges" />
+                    
                 </Frame>
             </StackLayout>
 

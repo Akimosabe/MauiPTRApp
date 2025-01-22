@@ -38,20 +38,36 @@
                                 <Frame Padding="5" Margin="3"
                                        HasShadow="False" CornerRadius="6"
                                        BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#121212}">
-                                    <Grid ColumnDefinitions="*,Auto,Auto" VerticalOptions="Center">
+                                    <Grid ColumnDefinitions="*,Auto,Auto,Auto" VerticalOptions="Center">
                                         <!-- Название книги -->
                                         <StackLayout Grid.Column="0" Spacing="2">
                                             <Label Text="{Binding Title}" 
                                                    FontSize="14" 
                                                    FontAttributes="Bold"
                                                    TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}" />
-
-                                            <!-- Автор книги -->
                                             <Label Text="{Binding Author}" 
                                                    FontSize="10" 
                                                    FontAttributes="Italic"
                                                    TextColor="{AppThemeBinding Light=#555555, Dark=#BBBBBB}" />
+                                            <!-- Поле для описания, которое будет скрыто по умолчанию -->
+                                            <Label Text="{Binding Description}" 
+                                                   FontSize="10"
+                                                   TextColor="{AppThemeBinding Light=#777777, Dark=#CCCCCC}"
+                                                   IsVisible="{Binding IsDescriptionVisible}"
+                                                   LineBreakMode="WordWrap" />
                                         </StackLayout>
+
+                                        <!-- Кнопка "Инфо" -->
+                                        <Button BackgroundColor="{AppThemeBinding Light=#007BFF, Dark=#0056B3}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowDescriptionCommand}"
+                                                CommandParameter="{Binding}"
+                                                HeightRequest="40"
+                                                WidthRequest="40"
+                                                Grid.Column="1">
+                                            <Button.ImageSource>
+                                                <FileImageSource File="info.png" />
+                                            </Button.ImageSource>
+                                        </Button>
 
                                         <!-- Кнопка редактирования -->
                                         <Button BackgroundColor="{AppThemeBinding Light=#007BFF, Dark=#0056B3}"
@@ -59,7 +75,7 @@
                                                 CommandParameter="{Binding}"
                                                 HeightRequest="40"
                                                 WidthRequest="40"
-                                                Grid.Column="1">
+                                                Grid.Column="2">
                                             <Button.ImageSource>
                                                 <FileImageSource File="edit.png" />
                                             </Button.ImageSource>
@@ -71,7 +87,7 @@
                                                 CommandParameter="{Binding}"
                                                 HeightRequest="40"
                                                 WidthRequest="40"
-                                                Grid.Column="2">
+                                                Grid.Column="3">
                                             <Button.ImageSource>
                                                 <FileImageSource File="delete.png" />
                                             </Button.ImageSource>

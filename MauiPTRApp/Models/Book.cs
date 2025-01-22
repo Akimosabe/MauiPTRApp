@@ -1,42 +1,81 @@
 ﻿using System.ComponentModel;
 
-namespace MauiPTRApp.Models;
-
-public class Book : INotifyPropertyChanged
+namespace MauiPTRApp.Models
 {
-    private string _title;
-    private string _author;
-
-    public string Title
+    public class Book : INotifyPropertyChanged
     {
-        get => _title;
-        set
+        // Название книги
+        private string _title = string.Empty;
+        // Автор книги
+        private string _author = string.Empty;
+        // Описание
+        private string _description = string.Empty;
+        // Открывашка информации о книге
+        private bool _isDescriptionVisible;
+
+        // Получение названия
+        public string Title
         {
-            if (_title != value)
+            get => _title;
+            set
             {
-                _title = value;
-                OnPropertyChanged(nameof(Title));
+                if (_title != value) // Проверка на изменение значения
+                {
+                    _title = value;
+                    OnPropertyChanged(nameof(Title)); // Уведомление об изменении свойства
+                }
             }
         }
-    }
 
-    public string Author
-    {
-        get => _author;
-        set
+        // Получение автора
+        public string Author
         {
-            if (_author != value)
+            get => _author;
+            set
             {
-                _author = value;
-                OnPropertyChanged(nameof(Author));
+                if (_author != value)
+                {
+                    _author = value;
+                    OnPropertyChanged(nameof(Author)); // Уведомление об изменении свойства
+                }
             }
         }
-    }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        // Описание книги
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                if (_description != value)
+                {
+                    _description = value;
+                    OnPropertyChanged(nameof(Description)); // Уведомление об изменении свойства
+                }
+            }
+        }
 
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        // Видимость описания книги
+        public bool IsDescriptionVisible
+        {
+            get => _isDescriptionVisible;
+            set
+            {
+                if (_isDescriptionVisible != value)
+                {
+                    _isDescriptionVisible = value;
+                    OnPropertyChanged(nameof(IsDescriptionVisible)); // Уведомление об изменении свойства
+                }
+            }
+        }
+
+        // Эвент уведомления об изменении свойств
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        // Метод для вызова события
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
